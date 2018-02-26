@@ -21,4 +21,10 @@ describe Oystercard do
     end
   end
 
+  describe '#deduct' do
+    it 'changes balance depending on the fare' do
+      expect { oystercard.deduct(5) }.to change { oystercard.balance }.by -5
+    end
+  end
+
 end
