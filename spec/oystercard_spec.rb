@@ -11,10 +11,13 @@ describe Oystercard do
   end
 
   describe '#top_up' do
-    it 'initializes with a balance of zero' do
-      old_balance = oystercard.balance
-      oystercard.top_up(5)
-      expect(oystercard.balance).to eq (old_balance + 5)
+    it 'allows balance to be topped up' do
+      expect { oystercard.top_up(5) }.to change { oystercard.balance }.by 5
+    end
+    it "doesn't allow topping up past a maximum limit of £90" do
+      maximum_balance = Oystercard::MAXIMUM_BALANCE
+      illegal_topup =  maximum_balance + 1 - oystercard.balance
+      expect { oystercard.top_up(illegal_topup) }.to raise_error "Maximum balance of £#{maximum_balance} exceeded!"
     end
   end
 
