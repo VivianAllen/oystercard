@@ -10,4 +10,12 @@ describe Oystercard do
     end
   end
 
+  describe '#top_up' do
+    it 'initializes with a balance of zero' do
+      old_balance = oystercard.balance
+      oystercard.top_up(5)
+      expect(oystercard.balance).to eq (old_balance + 5)
+    end
+  end
+
 end
