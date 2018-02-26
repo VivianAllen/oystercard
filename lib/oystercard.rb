@@ -1,6 +1,7 @@
 class Oystercard
 
   MAXIMUM_BALANCE = 90
+  MINIMUM_BALANCE = 1
 
   attr_reader :balance, :status
 
@@ -10,7 +11,7 @@ class Oystercard
   end
 
   def top_up(amount)
-    fail "Maximum balance of £#{MAXIMUM_BALANCE} exceeded!" if @balance + amount > MAXIMUM_BALANCE
+    raise Exception.new("Maximum balance of £#{MAXIMUM_BALANCE} exceeded!") if @balance + amount > MAXIMUM_BALANCE
     @balance += amount
   end
 
@@ -19,7 +20,7 @@ class Oystercard
   end
 
   def touch_in
-    raise Exception.new('Minimum balance for travel is £1!') if @balance < 1
+    raise Exception.new("Minimum balance for travel is £#{MINIMUM_BALANCE}") if @balance < MINIMUM_BALANCE
     @status = :in_transit
   end
 

@@ -4,6 +4,9 @@ describe Oystercard do
 
   subject(:oystercard) { described_class.new }
 
+  maximum_balance = Oystercard::MAXIMUM_BALANCE
+  minimum_balance = Oystercard::MINIMUM_BALANCE
+
   describe '#balance' do
     it 'initializes with a balance of zero' do
       expect(oystercard.balance).to eq 0
@@ -15,7 +18,6 @@ describe Oystercard do
       expect { oystercard.top_up(5) }.to change { oystercard.balance }.by 5
     end
     it "doesn't allow topping up past a maximum limit of £90" do
-      maximum_balance = Oystercard::MAXIMUM_BALANCE
       illegal_topup =  maximum_balance + 1 - oystercard.balance
       expect { oystercard.top_up(illegal_topup) }.to raise_error "Maximum balance of £#{maximum_balance} exceeded!"
     end
@@ -60,8 +62,8 @@ describe Oystercard do
   end
 
   describe '#minimum balance' do
-      it 'denies touch_in if balance is less than £1' do
-        expect{ oystercard.touch_in }.to raise_error('Minimum balance for travel is £1!')
+      it 'denies touch_in if balance is less than Minimum Balance' do
+        expect{ oystercard.touch_in }.to raise_error("Minimum balance for travel is £#{minimum_balance}")
       end
     end
 
