@@ -3,11 +3,11 @@ class Oystercard
   MAXIMUM_BALANCE = 90
   MINIMUM_FARE = 1
 
-  attr_reader :balance, :status
+  attr_reader :balance, :entry_station
 
   def initialize
     @balance = 0.0
-    @status = :not_in_transit
+    @entry_station = nil
   end
 
   def top_up(amount)
@@ -15,18 +15,18 @@ class Oystercard
     @balance += amount
   end
 
-  def touch_in
+  def touch_in(station)
     raise Exception.new("Minimum balance for travel is £#{MINIMUM_FARE}") if @balance < MINIMUM_FARE
-    @status = :in_transit
+    @entry_station = station
   end
 
   def touch_out
     deduct(MINIMUM_FARE)
-    @status = :not_in_transit
+    @entry_station = nil
   end
 
   def in_journey?
-    @status == :in_transit
+    @entry_station != nil
   end
 
   private

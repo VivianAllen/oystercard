@@ -7,6 +7,10 @@ describe Oystercard do
   maximum_balance = Oystercard::MAXIMUM_BALANCE
   minimum_fare = Oystercard::MINIMUM_FARE
 
+  before(:each) do
+    @fake_station = double
+  end
+
   describe '#balance' do
     it 'initializes with a balance of zero' do
       expect(oystercard.balance).to eq 0
@@ -31,29 +35,33 @@ describe Oystercard do
 
     describe '#touch_in' do
       it 'changes status :in_transit' do
-        expect { oystercard.touch_in }.to change { oystercard.status }.from(:not_in_transit).to :in_transit
+        expect { oystercard.touch_in(@fake_station) }.to change { oystercard.entry_station }.from(nil).to @fake_station
+      end
+
+      it 'stores entry station data on card' do
+        expect { oystercard.touch_in(@fake_station) }.to change { oystercard.entry_station }.from(nil).to @fake_station
       end
     end
 
     describe '#touch_out' do
       it 'changes status :not_in_transit' do
-        oystercard.touch_in
-        expect { oystercard.touch_out }.to change { oystercard.status }.from(:in_transit).to :not_in_transit
+        oystercard.touch_in(@fake_station)
+        expect { oystercard.touch_out }.to change { oystercard.entry_station }.from(@fake_station).to nil
       end
       it 'deducts minimum fare' do
-        oystercard.touch_in
+        oystercard.touch_in(@fake_station)
         expect { oystercard.touch_out }.to change { oystercard.balance }.by -minimum_fare
       end
     end
 
     describe '#in_journey?' do
       it 'returns true if status is :in_transit' do
-        oystercard.touch_in
+        oystercard.touch_in(@fake_station)
         expect(oystercard).to be_in_journey
       end
 
       it 'returns false if status is :not_in_transit' do
-        oystercard.touch_in
+        oystercard.touch_in(@fake_station)
         oystercard.touch_out
         expect(oystercard).not_to be_in_journey
       end
@@ -63,7 +71,7 @@ describe Oystercard do
 
   describe '#minimum balance' do
       it 'denies touch_in if balance is less than Minimum Balance' do
-        expect{ oystercard.touch_in }.to raise_error("Minimum balance for travel is £#{minimum_fare}")
+        expect{ oystercard.touch_in(@fake_station) }.to raise_error("Minimum balance for travel is £#{minimum_fare}")
       end
     end
 
