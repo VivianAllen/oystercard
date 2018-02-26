@@ -27,30 +27,42 @@ describe Oystercard do
     end
   end
 
-  describe '#touch_in' do
-    it 'changes status :in_transit' do
-      expect { oystercard.touch_in }.to change { oystercard.status }.from(:not_in_transit).to :in_transit
+  context 'When balance is 10' do
+    before do
+      oystercard.top_up(10)
+    end
+
+    describe '#touch_in' do
+      it 'changes status :in_transit' do
+        expect { oystercard.touch_in }.to change { oystercard.status }.from(:not_in_transit).to :in_transit
+      end
+    end
+
+    describe '#touch_out' do
+      it 'changes status :not_in_transit' do
+        oystercard.touch_in
+        expect { oystercard.touch_out }.to change { oystercard.status }.from(:in_transit).to :not_in_transit
+      end
+    end
+
+    describe '#in_journey?' do
+      it 'returns true if status is :in_transit' do
+        oystercard.touch_in
+        expect(oystercard).to be_in_journey
+      end
+
+      it 'returns false if status is :not_in_transit' do
+        oystercard.touch_in
+        oystercard.touch_out
+        expect(oystercard).not_to be_in_journey
+      end
     end
   end
 
-  describe '#touch_out' do
-    it 'changes status :not_in_transit' do
-      oystercard.touch_in
-      expect { oystercard.touch_out }.to change { oystercard.status }.from(:in_transit).to :not_in_transit
+  describe '#minimum balance' do
+      it 'denies touch_in if balance is less than £1' do
+        expect{ oystercard.touch_in }.to raise_error('Minimum balance for travel is £1!')
+      end
     end
-  end
-
-  describe '#in_journey?' do
-    it 'returns true if status is :in_transit' do
-      oystercard.touch_in
-      expect(oystercard).to be_in_journey
-    end
-    it 'returns false if status is :not_in_transit' do
-      oystercard.touch_in
-      oystercard.touch_out
-      expect(oystercard).not_to be_in_journey
-    end
-
-  end
 
 end

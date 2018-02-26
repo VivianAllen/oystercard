@@ -19,6 +19,7 @@ class Oystercard
   end
 
   def touch_in
+    raise Exception.new('Minimum balance for travel is £1!') if @balance < 1
     @status = :in_transit
   end
 
