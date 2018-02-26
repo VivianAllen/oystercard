@@ -5,7 +5,7 @@ describe Oystercard do
   subject(:oystercard) { described_class.new }
 
   maximum_balance = Oystercard::MAXIMUM_BALANCE
-  minimum_balance = Oystercard::MINIMUM_BALANCE
+  minimum_fare = Oystercard::MINIMUM_FARE
 
   describe '#balance' do
     it 'initializes with a balance of zero' do
@@ -23,13 +23,8 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-    it 'changes balance depending on the fare' do
-      expect { oystercard.deduct(5) }.to change { oystercard.balance }.by -5
-    end
-  end
-
   context 'When balance is 10' do
+
     before do
       oystercard.top_up(10)
     end
@@ -45,6 +40,10 @@ describe Oystercard do
         oystercard.touch_in
         expect { oystercard.touch_out }.to change { oystercard.status }.from(:in_transit).to :not_in_transit
       end
+      it 'deducts minimum fare' do
+        oystercard.touch_in
+        expect { oystercard.touch_out }.to change { oystercard.balance }.by -minimum_fare
+      end
     end
 
     describe '#in_journey?' do
@@ -59,11 +58,12 @@ describe Oystercard do
         expect(oystercard).not_to be_in_journey
       end
     end
+
   end
 
   describe '#minimum balance' do
       it 'denies touch_in if balance is less than Minimum Balance' do
-        expect{ oystercard.touch_in }.to raise_error("Minimum balance for travel is £#{minimum_balance}")
+        expect{ oystercard.touch_in }.to raise_error("Minimum balance for travel is £#{minimum_fare}")
       end
     end
 
