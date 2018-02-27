@@ -1,10 +1,14 @@
+require_relative './journey_log.rb'
+require_relative './journey.rb'
+require_relative './station.rb'
+
 class Oystercard
 
   MAXIMUM_BALANCE = 90
   MINIMUM_FARE = 1
 
-  def initialize(journey_log_class = JourneyLog)
-    @journey_log = journey_log_class.new
+  def initialize(jlog_class = JourneyLog, jclass = Journey)
+    @journey_log = jlog_class.new(jclass)
     @top_up_sum = 0.0
   end
 
