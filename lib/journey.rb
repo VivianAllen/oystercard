@@ -15,7 +15,7 @@ MINIMUM_FARE = 1
   end
 
   def complete?
-    @exit_station && @entry_station
+    !!@exit_station && !!@entry_station
   end
 
   def fare

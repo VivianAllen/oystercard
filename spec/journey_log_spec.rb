@@ -2,21 +2,32 @@ require 'journey_log.rb'
 
 require 'journey_log'
 describe JourneyLog do
+  let(:dbl_station) { double :dbl_station }
+  let(:dbl_station2) { double :dbl_station2 }
+  let(:dbl_journey2) { double :dbl_journey2 }
+  let(:dbl_journey) { double :dbl_journey,
+    finish: dbl_journey2,
+    complete?: true
+   }
+  let(:dbl_journey_class) {double :dbl_journey_class, new: dbl_journey }
+  subject { described_class.new(dbl_journey_class) }
 
-  let(:journey){ double :journey } #this may need to have some methods
-  let(:station){ double :station }
-  let(:journey_class){double :journey_class, new: journey}
-  subject {described_class.new(journey_class)}
-
-  describe '#start' do
-    it 'starts a journey' do
-      expect(journey_class).to receive(:new).with(station)
-      subject.start(station)
+  context 'incomplete journeys' do
+    it 'records an unfinished journey' do
+      subject.start(dbl_station)
+      expect(subject.journeys).to include dbl_journey
     end
+    it 'records an unstarted journey' do
+      subject.finish(dbl_station)
+      expect(subject.journeys).to include dbl_journey2
+    end
+  end
 
-    it 'records a journey' do
-      subject.start(station)
-      expect(subject.journeys).to include journey
+  context 'complete journeys' do
+    it 'records a complete journey' do
+      subject.start(dbl_station)
+      subject.finish(dbl_station2)
+      expect(subject.journeys).to include dbl_journey
     end
   end
 end
