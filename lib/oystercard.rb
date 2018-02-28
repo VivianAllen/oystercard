@@ -37,10 +37,8 @@ class Oystercard
   private
 
   def sum_fares
-    return 0.0 unless journey_history
-    summed_fares = 0.0
-    journey_history.each do |journey|
-      summed_fares += journey.fare
+    journey_history.reduce(0.0) do |sum, journey|
+      sum + journey.fare
     end
   end
 

@@ -3,31 +3,31 @@ require 'oystercard'
 describe Oystercard do
 
   let(:dbl_station) { double :db_station }
+  let(:dbl_journey) { double :dbl_journey,
+    fare: 1
+  }
   let(:dbl_log) { double :dbl_log,
     start: nil,
     finish: nil,
-    journeys: nil
+    journeys: [dbl_journey, dbl_journey]
    }
    let(:dbl_log_class) { double :dbl_log_class,
      new: dbl_log
     }
   subject { described_class.new(dbl_log_class) }
 
-  describe '#balance' do
-    it 'initializes with a balance of zero' do
-      expect(subject.balance).to eq 0
-    end
+context 'balance adjustment' do
+it 'calculates balance' do
+    expect(subject.balance).to eq -2
   end
-
-  describe '#top_up' do
-    it 'allows balance to be topped up' do
-      expect { subject.top_up(5) }.to change { subject.balance }.by 5
-    end
-    it "doesn't allow topping up past a maximum limit of £90" do
-      illegal_topup =  Oystercard::MAXIMUM_BALANCE + 1 - subject.balance
-      expect { subject.top_up(illegal_topup) }.to raise_error "Maximum balance of £#{Oystercard::MAXIMUM_BALANCE} exceeded!"
-    end
+  it 'allows balance to be topped up' do
+    expect { subject.top_up(5) }.to change { subject.balance }.by 5
   end
+  it "doesn't allow topping up past a maximum limit of £90" do
+    illegal_topup =  Oystercard::MAXIMUM_BALANCE + 1 - subject.balance
+    expect { subject.top_up(illegal_topup) }.to raise_error "Maximum balance of £#{Oystercard::MAXIMUM_BALANCE} exceeded!"
+  end
+end
 
   context 'When balance is 0' do
     it 'denies touch_in if balance is less than Minimum Fare' do
