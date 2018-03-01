@@ -11,10 +11,12 @@ describe Oystercard do
     finish: nil,
     journeys: [dbl_journey, dbl_journey]
    }
-   let(:dbl_log_class) { double :dbl_log_class,
+  let(:dbl_log_class) { double :dbl_log_class,
      new: dbl_log
     }
-  subject { described_class.new(dbl_log_class) }
+  let(:dbl_printer) { double :printer, print_journeys: nil}
+  let(:dbl_jclass) { double :dbl_jclass, new: dbl_journey }
+  subject { described_class.new(dbl_log_class, dbl_jclass, dbl_printer) }
 
 context 'balance adjustment' do
 it 'calculates balance' do
@@ -56,9 +58,9 @@ end
   end
 
   describe '#journey_history' do
-    it 'messages journey log to  retrieve history' do
-      expect(dbl_log).to receive(:journeys)
-      subject.journey_history
+    it 'messages journey log printer to print history' do
+      expect(dbl_printer).to receive(:print_journeys)
+      subject.journeys
     end
   end
 end
