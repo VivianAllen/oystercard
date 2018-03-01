@@ -10,7 +10,7 @@ class JourneyLog
   end
 
   def finish(station)
-    if unstarted?
+    if unentered?
       @journeys.push(@journey_class.new.finish(station))
     else
       @journeys[-1].finish(station)
@@ -21,8 +21,9 @@ class JourneyLog
     @journeys.dup
   end
 
-  def unstarted?
-    @journeys.empty? || @journeys[-1].complete?
-  end
+  private
 
+  def unentered?
+    @journeys.empty? || !!@journeys[-1].exit_station
+  end
 end

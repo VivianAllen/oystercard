@@ -41,5 +41,4 @@ class Oystercard
       sum + journey.fare
     end
   end
-
 end

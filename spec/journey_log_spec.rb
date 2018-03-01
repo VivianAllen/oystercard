@@ -7,7 +7,7 @@ describe JourneyLog do
   let(:dbl_journey2) { double :dbl_journey2 }
   let(:dbl_journey) { double :dbl_journey,
     finish: dbl_journey2,
-    complete?: true
+    exit_station: dbl_station
    }
   let(:dbl_journey_class) {double :dbl_journey_class, new: dbl_journey }
   subject { described_class.new(dbl_journey_class) }
