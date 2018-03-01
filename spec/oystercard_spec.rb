@@ -60,7 +60,7 @@ end
   describe '#journey_history' do
     it 'messages journey log printer to print history' do
       expect(dbl_printer).to receive(:print_journeys)
-      subject.journeys
+      subject.journey_history
     end
   end
 end

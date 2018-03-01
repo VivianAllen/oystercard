@@ -32,7 +32,7 @@ class Oystercard
     @top_up_sum - sum_fares
   end
 
-  def journeys
+  def journey_history
     puts @printer.print_journeys(get_journeys)
   end
 

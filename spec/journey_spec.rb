@@ -55,7 +55,7 @@ end
   context 'given a journey between different zones' do
 
     it 'calculates the fare between two zones' do
-      2000.times do
+      100.times do
       zone1 = rand(1..6)
       zone2 = rand(1..6)
       allow(dbl_station1).to receive(:zone).and_return(zone1)
