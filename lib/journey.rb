@@ -19,6 +19,13 @@ MINIMUM_FARE = 1
   end
 
   def fare
-    complete? ? MINIMUM_FARE : PENALTY_FARE
+    complete? ? fare_calculator : PENALTY_FARE
   end
+
+private
+
+def fare_calculator
+  MINIMUM_FARE + (entry_station.zone - exit_station.zone).abs
+end
+
 end

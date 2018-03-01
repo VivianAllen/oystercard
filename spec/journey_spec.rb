@@ -1,7 +1,8 @@
 require 'journey'
 describe Journey do
-  let(:dbl_station1) { double :dbl_station1 }
-  let(:dbl_station2) { double :dbl_station2 }
+  let(:dbl_station1) { double :dbl_station1, zone: 1 }
+  let(:dbl_station2) { double :dbl_station2, zone: 1 }
+
 
   it "returns itself when exiting a journey" do
     expect(subject.finish(dbl_station1)).to eq(subject)
@@ -37,7 +38,7 @@ describe Journey do
     it 'knows it is incomplete' do
       expect(subject).not_to be_complete
     end
-    it 'returns a penalty fare ' do
+    it 'returns a penalty fare' do
       expect(subject.fare).to eq Journey::PENALTY_FARE
     end
   end
@@ -50,8 +51,21 @@ describe Journey do
     it 'knows it is complete' do
       expect(subject).to be_complete
     end
-    it 'returns a minimum fare' do
-      expect(subject.fare).to eq Journey::MINIMUM_FARE
-    end
-  end
 end
+  context 'given a journey between different zones' do
+
+    it 'calculates the fare between two zones' do
+      2000.times do
+      zone1 = rand(1..6)
+      zone2 = rand(1..6)
+      allow(dbl_station1).to receive(:zone).and_return(zone1)
+      allow(dbl_station2).to receive(:zone).and_return(zone2)
+      subject = described_class.new(dbl_station1)
+      subject.finish(dbl_station2)
+      expect(subject.fare).to eq Journey::MINIMUM_FARE + (zone1 - zone2).abs
+      end
+    end
+
+  end
+
+  end
