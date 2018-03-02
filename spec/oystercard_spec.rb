@@ -65,4 +65,19 @@ end
       subject.journey_history
     end
   end
+
+  describe '#top_up_list' do
+    it 'stores top up times' do
+      allow(Time).to receive(:now).and_return(Time.mktime(0))
+      top_up_amount = 5
+      subject.top_up(top_up_amount)
+      subject.top_up(top_up_amount)
+      expect(subject.top_up_history(false)).to eq \
+      Time.mktime(0).strftime("%D  %H:%M") + \
+      " : £#{top_up_amount}\n" + \
+      Time.mktime(0).strftime("%D  %H:%M") + \
+      " : £#{top_up_amount}\n"
+    end
+  end
+
 end

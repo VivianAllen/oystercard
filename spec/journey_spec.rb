@@ -1,15 +1,21 @@
 require 'journey'
 describe Journey do
-  let(:dbl_station1) { double :dbl_station1, zone: 1 }
-  let(:dbl_station2) { double :dbl_station2, zone: 1 }
+  let(:dbl_station1) { double :station, zone: 1 }
+  let(:dbl_station2) { double :station, zone: 1 }
 
-
-  it "returns itself when exiting a journey" do
-    expect(subject.finish(dbl_station1)).to eq(subject)
+  context 'general functions' do
+    subject { described_class.new(dbl_station1) }
+    it "returns itself when exiting a journey" do
+      expect(subject.finish(dbl_station1)).to eq(subject)
+    end
+    it 'records the time' do
+      allow(Time).to receive(:now).and_return(Time.mktime(0))
+      expect(subject.journey_time).to eq Time.mktime(0)
+    end
   end
 
   context 'given an entry station' do
-    subject {described_class.new(dbl_station1)}
+    subject { described_class.new(dbl_station1) }
     it 'has an entry station' do
       expect(subject.entry_station).to eq dbl_station1
     end

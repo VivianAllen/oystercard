@@ -1,12 +1,13 @@
 class Journey
-attr_reader :entry_station, :exit_station
+attr_reader :entry_station, :exit_station, :journey_time
 
 PENALTY_FARE = 6
 MINIMUM_FARE = 1
 
-  def initialize(entry_station=nil)
+  def initialize(entry_station=nil, clock=Time)
     @entry_station = entry_station
     @exit_station = nil
+    @journey_time = clock.now
   end
 
   def finish(station)
