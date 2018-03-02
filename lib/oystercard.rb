@@ -8,19 +8,22 @@ class Oystercard
   MAXIMUM_BALANCE = 90
   MINIMUM_FARE = 1
 
-  def initialize(jlog_class = JourneyLog, jclass = Journey, printer = Printer.new)
+  def initialize(jlog_class = JourneyLog, \
+    jclass = Journey, printer = Printer.new)
     @journey_log = jlog_class.new(jclass)
     @top_up_sum = 0.0
     @printer = printer
   end
 
   def top_up(amount)
-    raise Exception.new("Maximum balance of £#{MAXIMUM_BALANCE} exceeded!") if balance + amount > MAXIMUM_BALANCE
+    raise Exception.new("Maximum balance of £#{MAXIMUM_BALANCE} exceeded!") \
+    if balance + amount > MAXIMUM_BALANCE
     @top_up_sum += amount
   end
 
   def touch_in(station)
-    raise Exception.new("Minimum balance for travel is £#{MINIMUM_FARE}") if balance < MINIMUM_FARE
+    raise Exception.new("Minimum balance for travel is £#{MINIMUM_FARE}") \
+    if balance < MINIMUM_FARE
     @journey_log.start(station)
   end
 

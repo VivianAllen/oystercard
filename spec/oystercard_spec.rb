@@ -27,7 +27,8 @@ it 'calculates balance' do
   end
   it "doesn't allow topping up past a maximum limit of £90" do
     illegal_topup =  Oystercard::MAXIMUM_BALANCE + 1 - subject.balance
-    expect { subject.top_up(illegal_topup) }.to raise_error "Maximum balance of £#{Oystercard::MAXIMUM_BALANCE} exceeded!"
+    expect { subject.top_up(illegal_topup) }.to raise_error \
+    "Maximum balance of £#{Oystercard::MAXIMUM_BALANCE} exceeded!"
   end
 end
 
@@ -35,7 +36,8 @@ end
     it 'denies touch_in if balance is less than Minimum Fare' do
       expect{
         subject.touch_in(dbl_station)
-      }.to raise_error("Minimum balance for travel is £#{Oystercard::MINIMUM_FARE}")
+      }.to raise_error("Minimum balance for travel is "\
+        "£#{Oystercard::MINIMUM_FARE}")
     end
   end
 

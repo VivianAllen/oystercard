@@ -62,7 +62,8 @@ end
       allow(dbl_station2).to receive(:zone).and_return(zone2)
       subject = described_class.new(dbl_station1)
       subject.finish(dbl_station2)
-      expect(subject.fare).to eq Journey::MINIMUM_FARE + (zone1 - zone2).abs
+      expect(subject.fare).to eq Journey::MINIMUM_FARE + \
+      (zone1 - zone2).abs
       end
     end
 

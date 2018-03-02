@@ -3,7 +3,10 @@ class Printer
   def print_journeys(journey_history)
     print_string = ""
     journey_history.each_with_index do |journey, i|
-      print_string += "#{i+1}) " + print_line(journey.entry_station) + " to " + print_line(journey.exit_station) + " - Fare: #{journey.fare}\n"
+      print_string += "#{i+1}) " + \
+      print_line(journey.entry_station) + \
+      " to " + print_line(journey.exit_station) + \
+      " - Fare: #{journey.fare}\n"
     end
     print_string
   end
